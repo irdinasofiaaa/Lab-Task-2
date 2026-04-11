@@ -145,3 +145,92 @@ body {
 .filter-section select:focus {
   border-color: var(--accent);
 }
+
+/* =========================================
+   BOARD
+   ========================================= */
+#board {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  padding: 1.5rem 2rem 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================
+   COLUMN
+   ========================================= */
+.column {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 68px - 3rem);
+  overflow: hidden;
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.2rem .9rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.title-wrap {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+
+.column-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-todo       { background: var(--col-todo); box-shadow: 0 0 8px var(--col-todo); }
+.dot-inprogress { background: var(--col-inprogress); box-shadow: 0 0 8px var(--col-inprogress); }
+.dot-done       { background: var(--col-done); box-shadow: 0 0 8px var(--col-done); }
+
+.column-title {
+  font-family: var(--font-display);
+  font-size: .95rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.column-count {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 1px 8px;
+  font-family: var(--font-display);
+}
+
+.clear-done-btn {
+  font-family: var(--font-body);
+  font-size: .75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.clear-done-btn:hover {
+  color: var(--priority-high);
+  border-color: var(--priority-high);
+}
