@@ -1,0 +1,147 @@
+/* =========================================
+   STYLE.CSS — Kanban Task Board
+   All styles — no inline styles in JS
+   ========================================= */
+
+/* ── CSS Variables ── */
+:root {
+  --bg:          #ffff;
+  --surface:     #071328;
+  --surface-2:   #0c1e3d;
+  --border:      #1a3260;
+  --border-soft: #122548;
+
+  --col-todo:       #3b82f6;
+  --col-inprogress: #60a5fa;
+  --col-done:       #93c5fd;
+
+  --priority-high:   #f87171;
+  --priority-medium: #60a5fa;
+  --priority-low:    #34d399;
+
+  --text-primary:   #e0eaff;
+  --text-secondary: #6b8fc7;
+  --text-muted:     #334e7a;
+
+  --accent:    #3b82f6;
+  --accent-hov:#2563eb;
+
+  --font-display: 'Syne', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  18px;
+
+  --shadow-card: 0 2px 12px rgba(0,0,0,.35);
+  --shadow-modal:0 24px 60px rgba(0,0,0,.7);
+
+  --transition: 180ms ease;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+#header-app {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 68px;
+  background: rgba(4,13,31,.9);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+
+.header-title {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  color: var(--text-primary);
+}
+
+.task-counter {
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: .8rem;
+}
+
+#task-count {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.counter-label {
+  color: var(--text-secondary);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.filter-section {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+
+.filter-label {
+  font-size: .8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.filter-section select {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: .85rem;
+  padding: 6px 10px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.filter-section select:focus {
+  border-color: var(--accent);
+}
