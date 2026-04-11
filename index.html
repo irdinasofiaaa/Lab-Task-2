@@ -33,6 +33,56 @@
 			</div>
 		</div>
 	</header>
+
+	<!-- BOARD -->
+	<main id="board">
+
+		<!-- COLUMN TO DO-->
+		<section id= "todo" class="column">
+			<div class="column-header">
+				<div class= "title-wrap">
+					<span class="column-dot dot-todo"></span>
+			        <h2 class="column-title">To Do</h2>
+			        <span class="column-count" id="todo-count">0</span>
+				</div>	
+			</div>
+			<ul class="task-list" id="todo-list"></ul>
+		    <button class="add-task-btn" data-column="todo">
+		    	<span class="btn-plus">+</span> Add Task
+		    </button>
+		</section>
+
+		<!-- COLUMN IN PROGRESS-->
+		<section id= "inprogress" class="column">
+			<div class="column-header">
+				<div class= "title-wrap">
+					<span class="column-dot dot-inprogress"></span>
+			        <h2 class="column-title">In Progress</h2>
+			        <span class="column-count" id="inprogress-count">0</span>
+				</div>	
+			</div>
+			<ul class="task-list" id="inprogress-list"></ul>
+		    <button class="add-task-btn" data-column="inprogress">
+		    	<span class="btn-plus">+</span> Add Task
+		    </button>
+		</section>
+
+		<!-- COLUMN DONE-->
+		<section id= "done" class="column">
+			<div class="column-header">
+				<div class= "title-wrap">
+					<span class="column-dot dot-done"></span>
+			        <h2 class="column-title">Done</h2>
+			        <span class="column-count" id="done-count">0</span>
+				</div>	
+			</div>
+			<ul class="task-list" id="done-list"></ul>
+		    <button class="add-task-btn" data-column="done">
+		    	<span class="btn-plus">+</span> Add Task
+		    </button>
+		</section>
+
+	</main>
 	
 </body>
 </html>
