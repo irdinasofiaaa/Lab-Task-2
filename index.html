@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Simple Kanban Board</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+	<!-- HEADER TASK 1 -->
+
+	<header id="header-app">
+		<div class="header-left">
+			<div class="header-title">
+				<h1 class="title">Simple Kanban Board</h1>
+				<span class="task-counter">
+					<span id="task-count">0</span>
+					<span class="counter-label">Tasks </span>
+				</span>
+			</div>
+		</div>
+
+		<div class="header-right">
+			<div class = "filter-section">
+				<label for="priority-filter" class="filter-label">Filter</label>
+				<select id="priority-filter">
+					<option value = "all">All Priorities</option>
+					<option value = "high">🔴 High</option>
+					<option value="medium">🟡 Medium</option>
+          			<option value="low">🟢 Low</option>
+				</select>
+			</div>
+		</div>
+	</header>
+	
+</body>
+</html>
