@@ -75,6 +75,7 @@
 			        <h2 class="column-title">Done</h2>
 			        <span class="column-count" id="done-count">0</span>
 				</div>	
+				<button class="clear-done-btn" id="clear-done-btn">Clear All</button>
 			</div>
 			<ul class="task-list" id="done-list"></ul>
 		    <button class="add-task-btn" data-column="done">
@@ -85,14 +86,14 @@
 	</main>
 	
 	<!-- MODAL -->
-	<div id="modal-overlay" class="modal-overlay-hidden" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
-		<div class="modal" id="modal">
-			<div class="modal-header">
-				<h2 class="modal-title" id = "modal-heading">New Task</h2>
-				<button class="modal-close-btn" id="modal-cancel-btn" aria-label="Close modal">X</button>	
-			</div>
-		</div>
-		<div class="modal-body">
+	<div id="modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-heading">New Task</h2>
+        <button class="modal-close-btn" id="modal-cancel-btn" aria-label="Close modal">✕</button>
+      </div>
+
+      <div class="modal-body">
         <div class="form-field">
           <label for="task-title-input" class="form-label">Title <span class="required">*</span></label>
           <input type="text" id="task-title-input" class="form-input" placeholder="What needs to be done?" maxlength="100" />
@@ -126,6 +127,9 @@
       </div>
     </div>
   </div>
+
+
+  <script src="taskmanager.js"></script>
 
 
 </body>
