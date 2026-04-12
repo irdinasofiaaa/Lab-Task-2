@@ -52,6 +52,15 @@ body {
   overflow-x: hidden;
 }
 
+/* subtle grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
 
 /* =========================================
    HEADER
@@ -234,3 +243,176 @@ body {
   color: var(--priority-high);
   border-color: var(--priority-high);
 }
+
+/* =========================================
+   TASK LIST
+   ========================================= */
+.task-list {
+  list-style: none;
+  padding: .8rem .8rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: .65rem;
+  flex: 1;
+}
+
+/* =========================================
+   TASK CARD
+   ========================================= */
+.task-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: .9rem 1rem;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+  overflow: hidden;
+  animation: card-in 220ms ease both;
+}
+
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.task-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  border-radius: 3px 0 0 3px;
+}
+
+.task-card.priority-high::before   { background: var(--priority-high); }
+.task-card.priority-medium::before { background: var(--priority-medium); }
+.task-card.priority-low::before    { background: var(--priority-low); }
+
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.4);
+}
+
+/* fade-out animation triggered by JS */
+.task-card.fade-out {
+  animation: card-out 320ms ease forwards;
+}
+
+@keyframes card-out {
+  to { opacity: 0; transform: scale(.92) translateY(-6px); }
+}
+
+/* hidden by priority filter */
+.task-card.is-hidden {
+  display: none;
+}
+
+/* ── Card title ── */
+.task-title-span {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: .95rem;
+  color: var(--text-primary);
+  margin-bottom: .35rem;
+  cursor: pointer;
+  word-break: break-word;
+  line-height: 1.35;
+}
+
+.task-title-span:hover {
+  color: #fff;
+}
+
+/* inline edit input */
+.inline-title-input {
+  width: 100%;
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: .95rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  outline: none;
+}
+
+/* ── Card description ── */
+.task-desc {
+  font-size: .82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: .55rem;
+  word-break: break-word;
+}
+
+/* ── Card meta row ── */
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+  margin-bottom: .7rem;
+}
+
+.priority-badge {
+  font-size: .7rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 2px 9px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.badge-high   { background: rgba(248,113,113,.15);  color: var(--priority-high);   border: 1px solid rgba(248,113,113,.3); }
+.badge-medium { background: rgba(96,165,250,.15);   color: var(--priority-medium); border: 1px solid rgba(96,165,250,.3); }
+.badge-low    { background: rgba(52,211,153,.15);   color: var(--priority-low);    border: 1px solid rgba(52,211,153,.3); }
+
+.task-due {
+  font-size: .75rem;
+  color: var(--text-muted);
+}
+
+.task-due.overdue {
+  color: var(--priority-high);
+}
+
+/* ── Card actions ── */
+.task-actions {
+  display: flex;
+  gap: .45rem;
+  justify-content: flex-end;
+}
+
+.task-btn {
+  font-family: var(--font-body);
+  font-size: .75rem;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  padding: 4px 12px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.task-btn-edit {
+  background: rgba(59,130,246,.12);
+  color: var(--accent);
+  border-color: rgba(59,130,246,.25);
+}
+
+.task-btn-edit:hover {
+  background: rgba(59,130,246,.25);
+}
+
+.task-btn-delete {
+  background: rgba(239,68,68,.1);
+  color: var(--priority-high);
+  border-color: rgba(239,68,68,.2);
+}
+
+.task-btn-delete:hover {
+  background: rgba(239,68,68,.22);
+}
+
