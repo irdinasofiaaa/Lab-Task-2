@@ -285,3 +285,230 @@ function updateTask(taskId, updatedData) {
   applyFilter(priorityFilterEl.value);
 }
 
+/* ────────────────────────────────────────
+   TASK 3 — Inline editing
+   Double-click title → replace with <input>
+   Enter or blur → commit
+──────────────────────────────────────── */
+
+function startInlineEdit(titleSpan, taskId) {
+  // Create an <input> to replace the title span
+  const input = document.createElement('input');
+  input.classList.add('inline-title-input');
+  input.setAttribute('type', 'text');
+  input.setAttribute('maxlength', '100');
+  input.value = titleSpan.textContent;
+
+  // Swap span for input in the DOM
+  const card = titleSpan.parentNode;
+  card.replaceChild(input, titleSpan);
+  input.focus();
+  input.select();
+
+  // Commit function — saves title and swaps back
+  function commitInlineEdit() {
+    const newTitle = input.value.trim();
+    if (newTitle && newTitle !== titleSpan.textContent) {
+      // Update state; updateTask handles the full card rebuild
+      updateTask(taskId, { title: newTitle });
+    } else {
+      // Revert: put the span back
+      if (input.parentNode) {
+        input.parentNode.replaceChild(titleSpan, input);
+      }
+    }
+  }
+
+  // Pressing Enter commits the edit
+  input.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      commitInlineEdit();
+    }
+    // Escape cancels
+    if (event.key === 'Escape') {
+      if (input.parentNode) {
+        input.parentNode.replaceChild(titleSpan, input);
+      }
+    }
+  });
+
+  // Moving focus away also commits
+  input.addEventListener('blur', commitInlineEdit, { once: true });
+}
+
+/* ────────────────────────────────────────
+   TASK 3 — Priority filter
+   Uses classList.toggle('is-hidden', condition)
+──────────────────────────────────────── */
+
+function applyFilter(filterValue) {
+  // Select all task cards across every column
+  const allCards = document.querySelectorAll('.task-card');
+
+  allCards.forEach(function(card) {
+    const cardPriority = card.getAttribute('data-priority');
+    // Hide card if it doesn't match; show if it does (or filter is 'all')
+    const shouldHide = filterValue !== 'all' && cardPriority !== filterValue;
+    card.classList.toggle('is-hidden', shouldHide);
+  });
+}
+
+/* ────────────────────────────────────────
+   TASK 3 — Clear Done column
+   Staggered fade-out: each card 100ms after previous
+──────────────────────────────────────── */
+
+function clearDoneColumn() {
+  // Get all cards currently in the Done column
+  const doneCards = doneList.querySelectorAll('.task-card');
+
+  doneCards.forEach(function(card, index) {
+    // Stagger: each card fades 100ms after the previous
+    setTimeout(function() {
+      card.classList.add('fade-out');
+      card.addEventListener('animationend', function() {
+        const taskId = parseInt(card.getAttribute('data-id'), 10);
+        card.remove();
+        tasks = tasks.filter(function(t) { return t.id !== taskId; });
+        updateCounters();
+      }, { once: true });
+    }, index * 100);
+  });
+}
+
+/* ────────────────────────────────────────
+   MODAL — open / close helpers
+──────────────────────────────────────── */
+
+function openModal() {
+  modalOverlay.classList.remove('hidden');
+  titleInput.focus();
+}
+
+function closeModal() {
+  modalOverlay.classList.add('hidden');
+  // Reset state and form fields
+  activeColumn  = null;
+  editingTaskId = null;
+  titleInput.value    = '';
+  descInput.value     = '';
+  priorityInput.value = 'medium';
+  dueInput.value      = '';
+  modalTitle.textContent = 'New Task';
+}
+
+/* ────────────────────────────────────────
+   MODAL — Save handler
+──────────────────────────────────────── */
+
+function handleSave() {
+  const title = titleInput.value.trim();
+  if (!title) {
+    // Highlight the title field if empty
+    titleInput.focus();
+    titleInput.style.borderColor = 'var(--priority-high)';
+    setTimeout(function() {
+      titleInput.style.borderColor = '';
+    }, 1200);
+    return;
+  }
+
+  if (editingTaskId !== null) {
+    // ── EDIT mode: update existing task ──
+    updateTask(editingTaskId, {
+      title:       title,
+      description: descInput.value.trim(),
+      priority:    priorityInput.value,
+      dueDate:     dueInput.value || null
+    });
+  } else {
+    // ── ADD mode: create new task ──
+    const taskObj = {
+      id:          nextId++,
+      title:       title,
+      description: descInput.value.trim(),
+      priority:    priorityInput.value,
+      dueDate:     dueInput.value || null,
+      column:      activeColumn
+    };
+    addTask(activeColumn, taskObj);
+  }
+
+  closeModal();
+}
+
+/* ────────────────────────────────────────
+   TASK 3 — Event Delegation
+   ONE listener per column <ul> handles both
+   Edit and Delete via data-action / data-id
+──────────────────────────────────────── */
+
+function attachColumnDelegation(listElement) {
+  listElement.addEventListener('click', function(event) {
+    // Read data attributes from the clicked element
+    const action = event.target.getAttribute('data-action');
+    const idStr  = event.target.getAttribute('data-id');
+
+    // If click wasn't on an action button, do nothing
+    if (!action || !idStr) { return; }
+
+    const taskId = parseInt(idStr, 10);
+
+    if (action === 'delete') { deleteTask(taskId); }
+    if (action === 'edit')   { editTask(taskId); }
+  });
+}
+
+/* ────────────────────────────────────────
+   INITIALISE — attach all event listeners
+──────────────────────────────────────── */
+
+function init() {
+  // ── "Add Task" buttons — one per column ──
+  const addButtons = document.querySelectorAll('.add-task-btn');
+  addButtons.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      activeColumn  = btn.getAttribute('data-column');
+      editingTaskId = null;
+      modalTitle.textContent = 'New Task';
+      openModal();
+    });
+  });
+
+  // ── Modal save ──
+  saveBtn.addEventListener('click', handleSave);
+
+  // ── Allow Enter key in title to save ──
+  titleInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') { handleSave(); }
+  });
+
+  // ── Modal cancel (both cancel buttons) ──
+  cancelBtn.addEventListener('click',  closeModal);
+  cancelBtn2.addEventListener('click', closeModal);
+
+  // ── Click outside modal to close ──
+  modalOverlay.addEventListener('click', function(event) {
+    if (event.target === modalOverlay) { closeModal(); }
+  });
+
+  // ── Priority filter ──
+  priorityFilterEl.addEventListener('change', function() {
+    applyFilter(priorityFilterEl.value);
+  });
+
+  // ── Clear Done ──
+  clearDoneBtn.addEventListener('click', clearDoneColumn);
+
+  // ── Event delegation on each column list ──
+  attachColumnDelegation(todoList);
+  attachColumnDelegation(inprogressList);
+  attachColumnDelegation(doneList);
+
+  // Initialise counters to 0
+  updateCounters();
+}
+
+// Start the app once the DOM is ready
+document.addEventListener('DOMContentLoaded', init);
